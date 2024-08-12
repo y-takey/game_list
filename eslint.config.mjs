@@ -1,5 +1,5 @@
 import globals from "globals";
-import { fixupConfigRules, fixupPluginRules, fixupConfigRules } from "@eslint/compat";
+import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
 import react from "eslint-plugin-react";
 import jsxA11Y from "eslint-plugin-jsx-a11y";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
