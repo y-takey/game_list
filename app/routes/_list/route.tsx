@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { Container, Table, Thead, Tbody, Tr, Th, Td, TableContainer } from "@chakra-ui/react";
 
 import { loader } from "./loader";
@@ -15,6 +15,7 @@ export default function Index() {
             <Tr>
               <Th>Title</Th>
               <Th isNumeric>Point</Th>
+              <Th></Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -22,11 +23,15 @@ export default function Index() {
               <Tr key={item.id}>
                 <Td>{item.title}</Td>
                 <Td isNumeric>{item.point}</Td>
+                <Td>
+                  <Link to={`${item.id}`}>Edit</Link>
+                </Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
       </TableContainer>
+      <Outlet />
     </Container>
   );
 }
