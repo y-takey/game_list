@@ -1,11 +1,57 @@
+import { useState, useEffect } from "react";
+import { Button } from "@chakra-ui/react";
 import { Outlet, useLoaderData } from "@remix-run/react";
+import firebase from "firebase/compat/app";
+import { auth as firebaseuiAuth } from "firebaseui";
+import "firebaseui/dist/firebaseui.css";
+import { auth } from "~/utils/firebase";
+
 import List from "./List";
 
 import { loader } from "./loader";
 export const clientLoader = loader;
 
 export default function Index() {
+  const [isLoggedIn, setLoggedIn] = useState(false);
   const { gameItems } = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      setLoggedIn(!!user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) return () => {};
+
+    let ui: firebaseuiAuth.AuthUI;
+    const init = async () => {
+      const firebaseui = await import("firebaseui");
+      ui = new firebaseui.auth.AuthUI(auth);
+
+      const uiConfig: firebaseui.auth.Config = {
+        signInFlow: "popup",
+        signInOptions: [
+          // eslint-disable-next-line import/no-named-as-default-member
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        ],
+      };
+
+      ui.start("#firebaseui-auth-container", uiConfig);
+    };
+    init();
+
+    return () => {
+      ui?.reset();
+    };
+  }, [isLoggedIn]);
+
+  const onLogout = () => {
+    auth.signOut();
+    window.location.reload();
+  };
 
   return (
     <div className="min-h-full">
@@ -16,7 +62,13 @@ export default function Index() {
             <div className="hidden md:block">
               <div className="ml-4 flex items-center md:ml-6">
                 <div className="relative ml-3">
-                  <button>test</button>
+                  {isLoggedIn ? (
+                    <Button colorScheme="blue" onClick={onLogout}>
+                      Log Out
+                    </Button>
+                  ) : (
+                    <div id="firebaseui-auth-container"></div>
+                  )}
                 </div>
               </div>
             </div>
