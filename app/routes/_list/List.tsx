@@ -1,14 +1,12 @@
 import React from "react";
 import { Link } from "@remix-run/react";
-import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from "@chakra-ui/react";
-import { GameItem } from "~/types";
+import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, HStack } from "@chakra-ui/react";
 
-type Props = {
-  items: GameItem[];
-};
+import { useItems } from "~/hooks";
+import DeleteButton from "./DeleteButton";
 
-const List: React.FC<Props> = props => {
-  const { items } = props;
+const List: React.FC = () => {
+  const { items } = useItems();
 
   return (
     <TableContainer width={"100%"}>
@@ -16,6 +14,8 @@ const List: React.FC<Props> = props => {
         <Thead>
           <Tr>
             <Th>Title</Th>
+            <Th>Release</Th>
+            <Th>Platform</Th>
             <Th isNumeric>Point</Th>
             <Th></Th>
           </Tr>
@@ -24,9 +24,14 @@ const List: React.FC<Props> = props => {
           {items.map(item => (
             <Tr key={item.id}>
               <Td>{item.title}</Td>
+              <Td>{item.releaseDate}</Td>
+              <Td>{item.platform}</Td>
               <Td isNumeric>{item.point}</Td>
               <Td>
-                <Link to={`${item.id}`}>Edit</Link>
+                <HStack>
+                  <Link to={`${item.id}`}>Edit</Link>
+                  <DeleteButton id={item.id!} />
+                </HStack>
               </Td>
             </Tr>
           ))}

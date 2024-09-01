@@ -1,19 +1,16 @@
 import { useState, useEffect } from "react";
-import { Button } from "@chakra-ui/react";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { Button, Flex, Spacer, Box } from "@chakra-ui/react";
+import { Outlet, Link } from "@remix-run/react";
 import firebase from "firebase/compat/app";
 import { auth as firebaseuiAuth } from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
 import { auth } from "~/utils/firebase";
+import { ItemsProvider } from "~/contexts/ItemsContext";
 
 import List from "./List";
 
-import { loader } from "./loader";
-export const clientLoader = loader;
-
 export default function Index() {
   const [isLoggedIn, setLoggedIn] = useState(false);
-  const { gameItems } = useLoaderData<typeof loader>();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
@@ -76,17 +73,33 @@ export default function Index() {
         </div>
       </nav>
 
-      <header className="bg-white shadow">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
-        </div>
-      </header>
-      <main>
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <Outlet />
-          <List items={gameItems} />
-        </div>
-      </main>
+      {isLoggedIn ? (
+        <ItemsProvider>
+          <header className="bg-white shadow">
+            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+              <Flex>
+                <Box>
+                  <h1 className="text-3xl font-bold tracking-tight text-gray-900">Games</h1>
+                </Box>
+                <Spacer />
+                <Box>
+                  <Link to={`new`}>
+                    <Button colorScheme="blue">追加</Button>
+                  </Link>
+                </Box>
+              </Flex>
+            </div>
+          </header>
+          <main>
+            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+              <Outlet />
+              <List />
+            </div>
+          </main>
+        </ItemsProvider>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

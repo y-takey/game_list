@@ -1,5 +1,9 @@
 export type GameItem = {
-  id: number;
+  id?: string;
   title: string;
-  point: number;
+  done: boolean;
+  releaseDate?: string;
+  point?: string | number;
+  platform?: string;
+  note?: string;
 };
