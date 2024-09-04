@@ -26,4 +26,7 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   base: basename,
+  css: {
+    postcss: "./postcss.config.js",
+  },
 });
