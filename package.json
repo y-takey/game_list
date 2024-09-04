@@ -8,6 +8,7 @@
     "dev": "remix vite:dev",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
+    "preview": "yarn build && vite preview",
     "typecheck": "tsc"
   },
   "dependencies": {
