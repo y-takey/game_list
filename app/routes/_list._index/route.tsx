@@ -1,3 +1,3 @@
-export default function Hoge() {
+export default function Index() {
   return <></>;
 }
