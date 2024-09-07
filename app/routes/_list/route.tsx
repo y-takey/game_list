@@ -54,17 +54,15 @@ export default function Index() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center"></div>
-            <div className="hidden md:block">
-              <div className="ml-4 flex items-center md:ml-6">
-                <div className="relative ml-3">
-                  {isLoggedIn && (
-                    <Button colorScheme="blue" onClick={onLogout}>
-                      Log Out
-                    </Button>
-                  )}
-                  <div style={{ display: isLoggedIn ? "none" : "block" }}>
-                    <div id="firebaseui-auth-container"></div>
-                  </div>
+            <div className="ml-4 flex items-center md:ml-6">
+              <div className="relative ml-3">
+                {isLoggedIn && (
+                  <Button colorScheme="blue" onClick={onLogout}>
+                    Log Out
+                  </Button>
+                )}
+                <div style={{ display: isLoggedIn ? "none" : "block" }}>
+                  <div id="firebaseui-auth-container"></div>
                 </div>
               </div>
             </div>
