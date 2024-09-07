@@ -14,6 +14,7 @@ const List: React.FC = () => {
         <Thead>
           <Tr>
             <Th>Title</Th>
+            <Th></Th>
             <Th>Release</Th>
             <Th>Platform</Th>
             <Th isNumeric>Point</Th>
@@ -24,6 +25,7 @@ const List: React.FC = () => {
           {items.map(item => (
             <Tr key={item.id}>
               <Td>{item.title}</Td>
+              <Td>{item.done && "✅"}</Td>
               <Td>{item.releaseDate}</Td>
               <Td>{item.platform}</Td>
               <Td isNumeric>{item.point}</Td>
