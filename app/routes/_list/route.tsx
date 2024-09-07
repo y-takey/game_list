@@ -21,12 +21,10 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    if (isLoggedIn) return () => {};
-
     let ui: firebaseuiAuth.AuthUI;
     const init = async () => {
       const firebaseui = await import("firebaseui");
-      ui = new firebaseui.auth.AuthUI(auth);
+      ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
 
       const uiConfig: firebaseui.auth.Config = {
         signInFlow: "popup",
@@ -43,7 +41,7 @@ export default function Index() {
     return () => {
       ui?.reset();
     };
-  }, [isLoggedIn]);
+  }, []);
 
   const onLogout = () => {
     auth.signOut();
@@ -59,13 +57,14 @@ export default function Index() {
             <div className="hidden md:block">
               <div className="ml-4 flex items-center md:ml-6">
                 <div className="relative ml-3">
-                  {isLoggedIn ? (
+                  {isLoggedIn && (
                     <Button colorScheme="blue" onClick={onLogout}>
                       Log Out
                     </Button>
-                  ) : (
-                    <div id="firebaseui-auth-container"></div>
                   )}
+                  <div style={{ display: isLoggedIn ? "none" : "block" }}>
+                    <div id="firebaseui-auth-container"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -84,7 +83,7 @@ export default function Index() {
                 <Spacer />
                 <Box>
                   <Link to={`new`}>
-                    <Button colorScheme="blue">追加</Button>
+                    <Button colorScheme="blue">Add</Button>
                   </Link>
                 </Box>
               </Flex>
