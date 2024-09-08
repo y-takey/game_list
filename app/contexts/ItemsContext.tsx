@@ -41,7 +41,7 @@ export const ItemsProvider: React.FC<React.PropsWithChildren> = ({ children }) =
     if (item.id) {
       await setDoc(doc(col, item.id), item);
     } else {
-      await addDoc(col, item);
+      await addDoc(col, { ...item, createdAt: new Date() });
     }
   };
 

@@ -1,4 +1,4 @@
-import { FirestoreDataConverter } from "firebase/firestore";
+import { FirestoreDataConverter, Timestamp } from "firebase/firestore";
 import { GameItem } from "~/types";
 
 export const DataConverter: FirestoreDataConverter<GameItem> = {
@@ -9,6 +9,7 @@ export const DataConverter: FirestoreDataConverter<GameItem> = {
       releaseDate: item.releaseDate || "",
       platform: item.platform || "",
       note: item.note || "",
+      createdAt: item.createdAt && Timestamp.fromDate(item.createdAt as Date),
     };
   },
   fromFirestore: snapshot => {
@@ -20,6 +21,7 @@ export const DataConverter: FirestoreDataConverter<GameItem> = {
       platform: data.platform || "",
       note: data.note || "",
       id: snapshot.id,
+      createdAt: data.createdAt?.toDate(),
     } as GameItem;
 
     return item;

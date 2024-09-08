@@ -6,4 +6,5 @@ export type GameItem = {
   point?: string | number;
   platform?: string;
   note?: string;
+  createdAt?: Date;
 };
