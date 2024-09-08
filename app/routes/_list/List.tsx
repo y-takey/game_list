@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "@remix-run/react";
-import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, HStack } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, HStack, Button } from "@chakra-ui/react";
 
 import { useItems } from "~/hooks";
 import DeleteButton from "./DeleteButton";
@@ -31,7 +31,9 @@ const List: React.FC = () => {
               <Td isNumeric>{item.point}</Td>
               <Td>
                 <HStack>
-                  <Link to={`${item.id}`}>Edit</Link>
+                  <Link to={`${item.id}`}>
+                    <Button variant="outline">Edit</Button>
+                  </Link>
                   <DeleteButton id={item.id!} />
                 </HStack>
               </Td>
