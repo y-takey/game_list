@@ -8,3 +8,6 @@ export type GameItem = {
   note?: string;
   createdAt?: Date;
 };
+
+export type Condition = "todo" | "all";
+export type Sorter = "releaseDate" | "createdAt";

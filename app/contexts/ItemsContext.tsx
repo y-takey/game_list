@@ -1,34 +1,44 @@
 import React, { createContext, useEffect, useState, useMemo } from "react";
-import { collection, onSnapshot, doc, addDoc, setDoc, deleteDoc } from "firebase/firestore";
+import { collection, onSnapshot, doc, addDoc, setDoc, deleteDoc, query, where, orderBy } from "firebase/firestore";
 
 import { firestore } from "~/utils/firebase";
 import { DataConverter } from "~/utils/data_converter";
-import { GameItem } from "~/types";
+import { GameItem, Condition, Sorter } from "~/types";
 
 const ItemsContext = createContext<{
   items: GameItem[];
   getItem: (id: GameItem["id"]) => GameItem | undefined;
   saveItem: (item: GameItem) => Promise<void>;
   deleteItem: (id: GameItem["id"]) => Promise<void>;
+  condition?: Condition;
+  setCondition: (condition: Condition) => void;
+  sorter?: Sorter;
+  setSorter: (sorter: Sorter) => void;
 }>({
   items: [],
   getItem: () => undefined,
   saveItem: async () => {},
   deleteItem: async () => {},
+  setCondition: () => {},
+  setSorter: () => {},
 });
 
 export const ItemsProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [items, setItems] = useState<GameItem[]>([]);
+  const [condition, setCondition] = useState<Condition>("todo");
+  const [sorter, setSorter] = useState<Sorter>("releaseDate");
   const col = useMemo(() => collection(firestore, `/games`).withConverter(DataConverter), []);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(col, {
+    const order = orderBy(sorter, "asc");
+    const q = condition === "todo" ? query(col, where("done", "==", false), order) : query(col, order);
+    const unsubscribe = onSnapshot(q, {
       next: snapshot => {
         setItems(snapshot.docs.map(doc => doc.data()));
       },
     });
     return unsubscribe;
-  }, [col]);
+  }, [col, condition, sorter]);
 
   const getItem = (id: GameItem["id"]): GameItem | undefined => {
     if (!id || id == "new") {
@@ -50,7 +60,11 @@ export const ItemsProvider: React.FC<React.PropsWithChildren> = ({ children }) =
     await deleteDoc(doc(col, id));
   };
 
-  return <ItemsContext value={{ items, getItem, saveItem, deleteItem }}>{children}</ItemsContext>;
+  return (
+    <ItemsContext value={{ items, getItem, saveItem, deleteItem, condition, setCondition, sorter, setSorter }}>
+      {children}
+    </ItemsContext>
+  );
 };
 
 export default ItemsContext;

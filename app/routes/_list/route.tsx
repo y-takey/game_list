@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Flex, Spacer, Box } from "@chakra-ui/react";
+import { Button, Flex, Spacer, Box, HStack } from "@chakra-ui/react";
 import { Outlet, Link } from "@remix-run/react";
 import firebase from "firebase/compat/app";
 import { auth as firebaseuiAuth } from "firebaseui";
@@ -7,6 +7,8 @@ import "firebaseui/dist/firebaseui.css";
 import { auth } from "~/utils/firebase";
 import { ItemsProvider } from "~/contexts/ItemsContext";
 
+import ConditionRadioButton from "./ConditionRadioButton";
+import SorterRadioButton from "./SorterRadioButton";
 import List from "./List";
 
 export default function Index() {
@@ -80,9 +82,13 @@ export default function Index() {
                 </Box>
                 <Spacer />
                 <Box>
-                  <Link to={`new`}>
-                    <Button colorScheme="blue">Add</Button>
-                  </Link>
+                  <HStack>
+                    <ConditionRadioButton />
+                    <SorterRadioButton />
+                    <Link to={`new`}>
+                      <Button colorScheme="blue">Add</Button>
+                    </Link>
+                  </HStack>
                 </Box>
               </Flex>
             </div>
